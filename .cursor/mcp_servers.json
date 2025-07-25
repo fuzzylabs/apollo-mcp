@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "apollo": {
+      "command": "uv",
+      "args": [
+        "run", 
+        "python", 
+        "src/apollo_mcp_server.py"
+      ],
+      "cwd": "/Users/maxmulvey/apollo-mcp",
+      "env": {
+        "APOLLO_API_KEY": "your_apollo_api_key_here"
+      },
+      "description": "Apollo.io MCP Server for account, people, and organization data"
+    }
+  }
+} 
