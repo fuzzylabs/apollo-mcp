@@ -5,14 +5,25 @@
 
 set -e
 
+# Get the directory where the script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Set working directory
-cd "/Users/maxmulvey/apollo-mcp"
+cd "$SCRIPT_DIR"
 
-# Set PATH to include UV
-export PATH="/Users/maxmulvey/.local/bin:$PATH"
+# Set PATH to include UV (check common installation paths)
+if [ -f "$HOME/.local/bin/uv" ]; then
+    export PATH="$HOME/.local/bin:$PATH"
+elif [ -f "$HOME/.cargo/bin/uv" ]; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+fi
 
-# Ensure APOLLO_API_KEY is set
-export APOLLO_API_KEY="${APOLLO_API_KEY:-MDbkLPBqNdPPymSVEY4XCQ}"
+# Ensure APOLLO_API_KEY is set (without a default key)
+if [ -z "$APOLLO_API_KEY" ]; then
+    echo "ERROR: APOLLO_API_KEY environment variable is not set"
+    echo "Please set your Apollo.io API key in the APOLLO_API_KEY environment variable"
+    exit 1
+fi
 
 # Run the server
-exec /Users/maxmulvey/.local/bin/uv run python src/apollo_mcp_server.py 
+exec uv run python src/apollo_mcp_server.py 

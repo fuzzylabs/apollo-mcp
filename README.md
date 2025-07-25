@@ -36,10 +36,12 @@ A Model Context Protocol (MCP) server that provides tools for interacting with t
 
 ## Installation
 
-1. **Clone or create the project**:
+### Quick Setup
+
+1. **Clone the repository**:
    ```bash
-   mkdir apollo-mcp-server
-   cd apollo-mcp-server
+   git clone <repository-url>
+   cd apollo-mcp
    ```
 
 2. **Install UV** (if not already installed):
@@ -52,23 +54,99 @@ A Model Context Protocol (MCP) server that provides tools for interacting with t
    uv sync
    ```
 
-4. **Set up environment variables**:
+4. **Set up your Apollo.io API key**:
    ```bash
-   cp .env.example .env
-   # Edit .env and add your Apollo.io API key
+   export APOLLO_API_KEY="your_actual_apollo_api_key_here"
    ```
+
+5. **Configure your MCP client** (see Configuration section below)
+
+### Automated Setup
+
+Use the deployment script for easier setup:
+```bash
+./deploy.sh
+```
+
+This will:
+- Install UV if needed
+- Install dependencies
+- Create a `.env` file template
+- Run setup verification
 
 ## Configuration
 
 ### Apollo.io API Key
 
-1. Log in to your Apollo.io account
-2. Go to Settings → Integrations → API
-3. Generate or copy your API key
-4. Add it to your `.env` file:
+1. **Get your API key**:
+   - Log in to your Apollo.io account
+   - Go to Settings → Integrations → API
+   - Generate or copy your API key
+
+2. **Set the API key** (choose one method):
+   
+   **Option A: Environment Variable** (Recommended)
+   ```bash
+   export APOLLO_API_KEY="your_actual_apollo_api_key_here"
    ```
-   APOLLO_API_KEY=your_actual_api_key_here
+   
+   **Option B: .env File**
+   ```bash
+   echo "APOLLO_API_KEY=your_actual_apollo_api_key_here" > .env
    ```
+
+### MCP Client Configuration
+
+#### For Claude Desktop
+
+1. **Update the configuration file**:
+   - Copy `claude_desktop_config.json` to your Claude Desktop configuration
+   - Update the `cwd` path to your actual project directory:
+   
+   ```json
+   {
+     "mcpServers": {
+       "apollo": {
+         "command": "uv",
+         "args": ["run", "python", "src/apollo_mcp_server.py"],
+         "cwd": "/path/to/your/apollo-mcp",
+         "env": {
+           "APOLLO_API_KEY": "your_apollo_api_key_here"
+         }
+       }
+     }
+   }
+   ```
+
+2. **Find your Claude Desktop config location**:
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   - **Linux**: `~/.config/claude/claude_desktop_config.json`
+
+#### For Cursor
+
+1. **Update the Cursor configuration**:
+   - The `.cursor/mcp_servers.json` file is already configured
+   - Update the `cwd` path to your actual project directory
+   - Ensure your `APOLLO_API_KEY` environment variable is set
+
+#### For Other MCP Clients
+
+Use the provided configuration as a template and adapt for your specific client.
+
+### Included Scripts
+
+The repository includes several helper scripts:
+
+- **`run_mcp_server.sh`**: Standard script to run the MCP server
+- **`debug_mcp_server.sh`**: Debug version with detailed logging
+- **`deploy.sh`**: Automated setup and deployment script
+
+All scripts automatically:
+- Detect the correct project directory
+- Find UV installation (checks `~/.local/bin` and `~/.cargo/bin`)
+- Validate that `APOLLO_API_KEY` is set
+- Provide helpful error messages
 
 ## Usage
 
@@ -198,6 +276,13 @@ uv run isort src/
 uv run mypy src/
 ```
 
+## Documentation
+
+For detailed setup instructions and troubleshooting:
+- **[SETUP.md](SETUP.md)** - Complete setup guide with step-by-step instructions
+- **[SCRIPTS.md](SCRIPTS.md)** - Documentation for helper scripts
+- **[usage_examples.md](usage_examples.md)** - API usage examples and workflows
+
 ## Integration with AI Assistants
 
 This MCP server can be used with AI assistants that support the Model Context Protocol, such as:
@@ -207,7 +292,7 @@ This MCP server can be used with AI assistants that support the Model Context Pr
 - Continue
 - Any MCP-compatible tool
 
-Configure your AI assistant to connect to this server to enable Apollo.io functionality.
+Configure your AI assistant to connect to this server to enable Apollo.io functionality. See [SETUP.md](SETUP.md) for detailed configuration instructions.
 
 ## Persona and Intent Data
 

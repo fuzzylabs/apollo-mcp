@@ -7,7 +7,7 @@
         "python",
         "src/apollo_mcp_server.py"
       ],
-      "cwd": "/Users/maxmulvey/apollo-mcp",
+      "cwd": "/path/to/your/apollo-mcp",
       "env": {
         "APOLLO_API_KEY": "your_apollo_api_key_here"
       }
